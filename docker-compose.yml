@@ -1,0 +1,16 @@
+services:
+
+  fastapi-app:
+    build:
+      context: .
+    container_name: "tondns-metadata-gen-api"
+    restart: on-failure
+    ports:
+      - "8001:8001"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./app:/app
