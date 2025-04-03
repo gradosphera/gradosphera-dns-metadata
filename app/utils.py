@@ -1,5 +1,6 @@
 from typing import Dict
 
+from fastapi import HTTPException
 from pytoniq_core import Cell, Address, begin_cell, StateInit
 
 SUPPORTED_TLD = ["ton", "gram"]
@@ -29,6 +30,12 @@ def calculate_nft_address_hash(subdomain: str, collection_addr_hash: str) -> str
 
 
 def create_item_metadata(collection_addr_hash: str, subdomain: str, domain: str, tld: str) -> Dict[str, str]:
+    if tld not in SUPPORTED_TLD:
+        raise HTTPException(status_code=400, detail="Unsupported TLD")
+    if tld == "gram":
+        description = f"A .{domain}.{tld} blockchain domain. Gram DNS is a service that allows users to assign a human-readable name to crypto wallets, smart contracts, and websites."
+    else:
+        description = f"A .{domain}.{tld} blockchain domain. TON DNS allows assigning human-readable names to wallets, smart contracts, and websites."
     return {
         "attributes": [
             {
@@ -42,5 +49,5 @@ def create_item_metadata(collection_addr_hash: str, subdomain: str, domain: str,
                 "uri": f"https://t.me/tondnsx_bot?startapp=manage__address__0--3A{calculate_nft_address_hash(subdomain, collection_addr_hash)}",
             }
         ],
-        "description": f'A .{domain}.{tld} blockchain domain. TON DNS allows assigning human-readable names to wallets, smart contracts, and websites.'
+        "description": description
     }
