@@ -36,11 +36,11 @@ def draw_centered_text(
         font_path: str,
         max_font_size: int,
         min_font_size: int,
-        text_color: Tuple[int, int, int],
+        text_color: Tuple,
         margin: int,
         side_padding: int,
         min_side_margin: int,
-        frame_fill: Tuple[int, int, int],
+        frame_fill: Tuple,
         frame_radius: int,
 ) -> None:
     available_width = image.width - 2 * min_side_margin
@@ -78,7 +78,7 @@ def draw_bottom_text(
         font_path: str,
         max_font_size: int,
         min_font_size: int,
-        text_color: Tuple[int, int, int],
+        text_color: Tuple,
         bottom_text_margin: int,
         bottom_side_padding: int,
         min_side_margin: int,
@@ -96,31 +96,41 @@ def draw_bottom_text(
 def generate_image(
         domain: str,
         subdomain: Optional[str] = None,
-        font_path: str = f"{BASE_DIR}/fonts/JetBrainsMono-ExtraBold.ttf",
+        tld: Optional[str] = "ton",
         max_font_size: int = 100,
         min_font_size: int = 10,
-        text_color: Tuple[int, int, int] = (0, 0, 0),
         margin: int = 380,
         side_padding: int = 67,
         min_side_margin: int = 100,
-        frame_fill: Tuple[int, int, int] = (255, 255, 255),
         frame_radius: int = 77,
         bottom_text_margin: int = 100,
         bottom_max_font_size: int = 40,
         bottom_min_font_size: int = 20,
         bottom_side_padding: int = 20,
 ) -> bytes:
-    length = len(subdomain or domain) if len(subdomain or domain) < 11 else 11
+    if tld == "gram":
+        font_path: str = f"{BASE_DIR}/fonts/Inter-SemiBold.ttf"
+        frame_fill: Tuple[int, int, int, int] = (45, 45, 50, 255)
+        text_color: Tuple[int, int, int] = (255, 255, 255)
+        length = 1 if len(subdomain or domain) % 2 == 0 else 2
+        bottom_text_color = text_color if length == 1 else (0, 0, 0)
+    else:
+        font_path: str = f"{BASE_DIR}/fonts/JetBrainsMono-ExtraBold.ttf"
+        text_color: Tuple[int, int, int] = (0, 0, 0)
+        frame_fill: Tuple[int, int, int] = (255, 255, 255)
+        length = len(subdomain or domain) if len(subdomain or domain) < 11 else 11
+        bottom_text_color = text_color
+
     if subdomain is not None and len(subdomain) > 28:
         subdomain = subdomain[:13] + "..." + subdomain[-12:]
     if len(domain) > 28:
         domain = domain[:13] + "..." + domain[-12:]
 
-    header_text = f"{subdomain or domain}.ton"
+    header_text = f"{subdomain or domain}.{tld}"
     if len(header_text) > 28:
         header_text = header_text[:13] + "..." + header_text[-12:]
 
-    image = Image.open(f"{BASE_DIR}/backgrounds/{length}.png")
+    image = Image.open(f"{BASE_DIR}/backgrounds/{tld}/{length}.png")
     draw = ImageDraw.Draw(image)
 
     draw_centered_text(
@@ -139,7 +149,7 @@ def generate_image(
     )
 
     if subdomain is not None:
-        bottom_text = f"{subdomain}.{domain}.ton"
+        bottom_text = f"{subdomain}.{domain}.{tld}"
         draw_bottom_text(
             draw,
             image,
@@ -147,7 +157,7 @@ def generate_image(
             font_path,
             bottom_max_font_size,
             bottom_min_font_size,
-            text_color,
+            bottom_text_color,
             bottom_text_margin,
             bottom_side_padding,
             min_side_margin
