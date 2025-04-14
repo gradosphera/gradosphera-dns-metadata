@@ -40,6 +40,36 @@ async def handler(tld: str, subdomain: str, domain: str) -> Response:
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/api/{tld}/{subdomain}/{domain}.json", include_in_schema=False)
+async def metadata_handler(
+        tld: str,
+        subdomain: str,
+        domain: str
+) -> Response:
+    if tld not in SUPPORTED_TLD:
+        raise HTTPException(status_code=400, detail="Unsupported TLD")
+
+    try:
+        metadata = {
+            "description": (
+                f"A .{domain}.{tld} blockchain domain. "
+                f"TON DNS is a service that allows users to assign a human-readable name "
+                f"to crypto wallets, smart contracts, and websites."
+            ),
+            "attributes": [
+                {
+                    "trait_type": "length",
+                    "value": str(len(subdomain)),
+                }
+            ]
+        }
+        return Response(
+            content=json.dumps(metadata, ensure_ascii=False, indent=2),
+            media_type="application/json"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/api/{tld}/{collection_addr_hash}/{subdomain}/{domain}.json", include_in_schema=False)
 async def handler(tld: str, collection_addr_hash, subdomain, domain: str) -> Response:
