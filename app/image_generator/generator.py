@@ -99,12 +99,12 @@ def generate_image(
         tld: Optional[str] = "ton",
         max_font_size: int = 100,
         min_font_size: int = 10,
-        margin: int = 380,
+        margin: int = 400,
         side_padding: int = 67,
         min_side_margin: int = 100,
         frame_radius: int = 77,
         bottom_text_margin: int = 100,
-        bottom_max_font_size: int = 40,
+        bottom_max_font_size: int = 50,
         bottom_min_font_size: int = 20,
         bottom_side_padding: int = 20,
 ) -> bytes:
@@ -115,18 +115,18 @@ def generate_image(
         length = 1 if len(subdomain or domain) % 2 == 0 else 2
         bottom_text_color = text_color if length == 1 else (0, 0, 0)
     else:
-        font_path: str = f"{BASE_DIR}/fonts/JetBrainsMono-ExtraBold.ttf"
-        text_color: Tuple[int, int, int] = (0, 0, 0)
-        frame_fill: Tuple[int, int, int] = (255, 255, 255)
+        font_path: str = f"{BASE_DIR}/fonts/Inter-SemiBold.ttf"
+        text_color: Tuple[int, int, int] = (33, 136, 255)
+        frame_fill: Tuple[int, int, int, int] = (0, 0, 0, 255)
         length = len(subdomain or domain) if len(subdomain or domain) < 11 else 11
-        bottom_text_color = text_color
+        bottom_text_color = (255, 255, 255)
 
     if subdomain is not None and len(subdomain) > 28:
         subdomain = subdomain[:13] + "..." + subdomain[-12:]
     if len(domain) > 28:
         domain = domain[:13] + "..." + domain[-12:]
 
-    header_text = f"{subdomain or domain}.{tld}"
+    header_text = f"{subdomain}" if subdomain is not None else f"{domain}.{tld}"
     if len(header_text) > 28:
         header_text = header_text[:13] + "..." + header_text[-12:]
 

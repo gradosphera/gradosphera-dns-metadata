@@ -52,13 +52,13 @@ async def metadata_handler(
     try:
         metadata = {
             "description": (
-                f"A .{domain}.{tld} blockchain domain. "
-                f"TON DNS is a service that allows users to assign a human-readable name "
-                f"to crypto wallets, smart contracts, and websites."
+                f"Субдомен .{domain}.{tld} для блокчейн-доменов Градосферы. "
+                f"DNS это сервис, который отображает человекочитаемые имена "
+                f"для адресов мультикошельков, кошельков, умных контрактов, ДАО, субДАО и вебсайтов."
             ),
             "attributes": [
                 {
-                    "trait_type": "length",
+                    "trait_type": "длина субдомена",
                     "value": str(len(subdomain)),
                 }
             ]

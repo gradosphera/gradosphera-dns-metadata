@@ -35,20 +35,20 @@ def create_item_metadata(collection_addr_hash: str, subdomain: str, domain: str,
     if tld not in SUPPORTED_TLD:
         raise HTTPException(status_code=400, detail="Unsupported TLD")
     if tld == "gram":
-        description = f"A .{domain}.{tld} blockchain domain. Gram DNS is a service that allows users to assign a human-readable name to crypto wallets, smart contracts, and websites."
+        description = f"Субдомен .{domain}.{tld} для блокчейн-доменов Градосферы. DNS это сервис, который отображает человекочитаемые имена для адресов мультикошельков, кошельков, умных контрактов, ДАО, субДАО и вебсайтов."
     else:
-        description = f"A .{domain}.{tld} blockchain domain. TON DNS is a service that allows users to assign a human-readable name to crypto wallets, smart contracts, and websites."
+        description = f"Субдомен .{domain}.{tld} для блокчейн-доменов Градосферы. DNS это сервис, который отображает человекочитаемые имена для адресов мультикошельков, кошельков, умных контрактов, ДАО, субДАО и вебсайтов."
     return {
         "attributes": [
             {
-                "trait_type": "length",
+                "trait_type": "длина субдомена",
                 "value": str(len(subdomain)),
             }
         ],
         "buttons": [
             {
-                "label": "⚙️ Manage",
-                "uri": f"https://t.me/tondnsx_bot?startapp=manage__address__0--3A{calculate_nft_address_hash(subdomain, collection_addr_hash)}",
+                "label": "⚙️ Управление субдоменом",
+                "uri": f"https://t.me/dns_gradosphera_bot?startapp=manage__address__0--3A{calculate_nft_address_hash(subdomain, collection_addr_hash)}",
             }
         ],
         "description": description
