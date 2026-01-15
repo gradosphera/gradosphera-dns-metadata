@@ -1,9 +1,8 @@
 services:
-
   fastapi-app:
     build:
       context: .
-    container_name: "tondns-metadata-gen-api"
+    container_name: "gradosphera-metadata-gen-api"
     restart: on-failure
     ports:
       - "8001:8001"
